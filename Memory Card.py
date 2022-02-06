@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (
         QHBoxLayout, QVBoxLayout, 
         QGroupBox, QButtonGroup, QRadioButton,  
         QPushButton, QLabel)
-from random import shuffle
+from random import shuffle, randint
  
 class Question():
     def __init__(self, question, right_answer, wrong1, wrong2, wrong3):
@@ -126,17 +126,21 @@ def check_answer():
     if answers[0].isChecked():
         # правильный ответ!
         show_correct('Правильно!')
+        window.score += 1
+        print('Статистика:', window.total, 'правильных ответов:', window.score)
+        print('Рейтинг:', (window.score/window.total*100), '%')
     else:
         if answers[1].isChecked() or answers[2].isChecked() or answers[3].isChecked():
             # неправильный ответ!
             show_correct('Неверно!')
+            print('Рейтинг:', (window.score/window.total*100), '%')
  
 def next_question():
     ''' задает следующий вопрос из списка '''
-    # этой функции нужна переменная, в которой будет указываться номер текущего вопроса
-    # эту переменную можно сделать глобальной, либо же сделать свойством "глобального объекта" (app или window)
-    # мы заведем (ниже) свойство window.cur_question.
-    window.cur_question = window.cur_question + 1 # переходим к следующему вопросу
+    window.total += 1
+    print('Статистика:', window.total, 'правильных ответов:', window.score)
+  
+    window.cur_question = randint(0, len(questions_list) - 1)   
     if window.cur_question >= len(questions_list):
         window.cur_question = 0 # если список вопросов закончился - идем сначала
     q = questions_list[window.cur_question] # взяли вопрос
@@ -156,6 +160,8 @@ window.setWindowTitle('Memo Card')
 window.cur_question = -1    # по-хорошему такие переменные должны быть свойствами, 
                             # только надо писать класс, экземпляры которого получат такие свойства, 
                             # но python позволяет создать свойство у отдельно взятого экземпляра
+window.score = 0
+window.total = 0
  
 btn_OK.clicked.connect(click_OK) # по нажатии на кнопку выбираем, что конкретно происходит
  
