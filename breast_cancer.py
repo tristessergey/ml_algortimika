@@ -33,7 +33,7 @@ plt.scatter(
     X_test['mean compactness'],
     c = y_pred,
     cmap = 'coolwarm',
-    alpha = 0.7
+    alpha = 0.71
 )
 
 confusion_matrix(y_test, y_pred)
